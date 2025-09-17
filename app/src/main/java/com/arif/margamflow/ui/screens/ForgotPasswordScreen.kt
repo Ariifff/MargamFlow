@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.arif.margamflow.PasswordUtils
 import com.arif.margamflow.navigation.Screen
@@ -22,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForgotPasswordScreen(
+    navController : NavController,
     onBackClick: () -> Unit
 ) {
     var username by remember { mutableStateOf("") }
@@ -33,12 +35,13 @@ fun ForgotPasswordScreen(
     var showPasswordReset by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
 
+    var isLoading by remember { mutableStateOf(false) }
+
     // Store fetched user data
     var storedSalt by remember { mutableStateOf("") }
     var storedHashedAnswers by remember { mutableStateOf(listOf<String>()) }
 
     val db = FirebaseFirestore.getInstance()
-    val navController = rememberNavController()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -192,6 +195,7 @@ fun ForgotPasswordScreen(
                             Button(
                                 onClick = {
                                     if (storedSalt.isBlank() || storedHashedAnswers.isEmpty()) return@Button
+                                    if(answer1.isBlank() || answer2.isBlank() || answer3.isBlank()) return@Button
                                     val userAnswers = listOf(answer1, answer2, answer3)
                                     val correctCount = userAnswers.zip(storedHashedAnswers)
                                         .count { (input, storedHash) ->
@@ -230,6 +234,7 @@ fun ForgotPasswordScreen(
 
                             Button(
                                 onClick = {
+                                    isLoading= true
                                     if (newPassword.isNotBlank()) {
                                         // Hash new password using stored salt
                                         val hashedPassword = PasswordUtils.hashPassword(newPassword, storedSalt)
@@ -238,12 +243,14 @@ fun ForgotPasswordScreen(
                                             .update("passwordHash", hashedPassword)
                                             .addOnSuccessListener {
                                                 errorMessage = "Password reset successful!"
+                                                isLoading=false
                                                 navController.navigate(Screen.Login.route) {
-                                                    popUpTo(Screen.Login.route) { inclusive = true }
+                                                    popUpTo(Screen.ForgotPassword.route) { inclusive = true }
                                                 }
                                             }
                                             .addOnFailureListener { errorMessage = "Error updating password" }
                                     } else {
+                                        isLoading=false
                                         errorMessage = "Password cannot be empty"
                                     }
                                 },
@@ -268,6 +275,19 @@ fun ForgotPasswordScreen(
                         Text("Back", color = Color(0xFF3D5AFE))
                     }
                 }
+            }
+        }
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    color = Color(0xFF3D5AFE),
+                    strokeWidth = 3.dp
+                )
             }
         }
     }

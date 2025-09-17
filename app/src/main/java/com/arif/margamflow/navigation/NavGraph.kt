@@ -78,6 +78,7 @@ fun AppNavGraph(navController: NavHostController) {
 
         composable(Screen.ForgotPassword.route) {
             ForgotPasswordScreen(
+                navController = navController,
                 onBackClick = { navController.popBackStack() },
             )
         }
