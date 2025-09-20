@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -134,31 +135,21 @@ fun SignUpScreen(
 
                 // App logo/icon (same as login)
                 Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
+                    painter = painterResource(id = R.drawable.logologin),
                     contentDescription = "App Logo",
-                    modifier = Modifier.size(80.dp)
+                    modifier = Modifier
+                        .height(120.dp)   // control height
+                        .wrapContentWidth()
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
 
-                // Branding text with gradient (same as login)
-                Text(
-                    buildAnnotatedString {
-                        withStyle(SpanStyle(color = Color.Black)) { append("Margam") }
-                        withStyle(SpanStyle(color = Color.DarkGray)) { append("Flow") }
-                    },
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 32.sp
-                    )
-                )
 
                 Text(
                     text = "Create your account",
                     style = MaterialTheme.typography.bodyLarge.copy(
                         color = Color.Black.copy(alpha = 0.8f)
                     ),
-                    modifier = Modifier.padding(top = 8.dp, bottom = 32.dp)
+                    modifier = Modifier.padding( bottom = 16.dp)
                 )
 
                 // Sign up card

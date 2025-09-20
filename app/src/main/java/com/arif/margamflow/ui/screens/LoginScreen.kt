@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -111,27 +112,15 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(100.dp))
 
                 // App logo/icon
                 Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_background), // Create this drawable
+                    painter = painterResource(id = R.drawable.logologin), // Create this drawable
                     contentDescription = "App Logo",
-                    modifier = Modifier.size(80.dp)
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Branding text with gradient
-                Text(
-                    buildAnnotatedString {
-                        withStyle(SpanStyle(color = Color.Black)) { append("Margam") }
-                        withStyle(SpanStyle(color = Color.DarkGray)) { append("Flow") }
-                    },
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 32.sp
-                    )
+                    modifier = Modifier
+                        .height(120.dp)   // control height
+                        .wrapContentWidth()
                 )
 
                 Text(
@@ -139,7 +128,7 @@ fun LoginScreen(
                     style = MaterialTheme.typography.bodyLarge.copy(
                         color = Color.Black.copy(alpha = 0.8f)
                     ),
-                    modifier = Modifier.padding(top = 8.dp, bottom = 32.dp)
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
 
                 // Login card
@@ -152,10 +141,13 @@ fun LoginScreen(
                             spotColor = Color.Black.copy(alpha = 0.2f)
                         ),
                     shape = RoundedCornerShape(24.dp),
-                    color = Color.White
+                    color = Color.White,
+
                 ) {
                     Column(
-                        modifier = Modifier.padding(24.dp)
+                        modifier = Modifier.padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
 
                         // Username field
@@ -237,6 +229,10 @@ fun LoginScreen(
                         // Sign In button
                         Button(
                             onClick = {
+                                if (username.isEmpty() || password.isEmpty()) {
+                                    Toast.makeText(context,"Please fill all fields", Toast.LENGTH_SHORT).show()
+                                    return@Button
+                                }
                                 isLoading = true
                                 coroutineScope.launch {
                                     delay(1200) // show loader for 1.2s
