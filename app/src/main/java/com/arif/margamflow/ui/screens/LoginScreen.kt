@@ -115,7 +115,7 @@ fun LoginScreen(
 
                 // App logo/icon
                 Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_background), // Create this drawable
+                    painter = painterResource(id = R.mipmap.ic_launcher_background), // Create this drawable
                     contentDescription = "App Logo",
                     modifier = Modifier.size(80.dp)
                 )

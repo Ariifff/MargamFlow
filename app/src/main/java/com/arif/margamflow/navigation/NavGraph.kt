@@ -1,5 +1,5 @@
 package com.arif.margamflow.navigation
-
+import com.arif.margamflow.ui.screens.LocationScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,6 +18,7 @@ sealed class Screen(val route: String) {
     }
     object ForgotPassword : Screen("forgot_password")
     object Home : Screen("home")
+    object Location : Screen("location_screen")
 }
 
 @Composable
@@ -29,7 +30,7 @@ fun AppNavGraph(navController: NavHostController) {
         composable(Screen.Login.route) {
             LoginScreen(
                 onSignIn = { username, password ->
-                    navController.navigate(Screen.Home.route) {
+                    navController.navigate(Screen.Location.route) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                     }
                 },
@@ -82,10 +83,13 @@ fun AppNavGraph(navController: NavHostController) {
                 onBackClick = { navController.popBackStack() },
             )
         }
-
-        composable(Screen.Home.route) {
-            Home()
+        composable(Screen.Location.route) {
+            LocationScreen()
         }
+
+//        composable(Screen.Home.route) {
+//            Home()
+//        }
 
     }
 }
